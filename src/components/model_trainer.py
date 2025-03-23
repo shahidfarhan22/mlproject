@@ -46,13 +46,48 @@ class ModelTrainer:
                 "CatBoosting Regressor": CatBoostRegressor(verbose=False),
                 "AdaBoost Regressor": AdaBoostRegressor(),
             }
-            
+            hyperparameter_grid = {
+                "Random Forest": {
+                    'n_estimators': [100, 300],  # Reduced number of trees
+                    'max_depth': [None, 10],  # Simplified depth options
+                    'min_samples_split': [2, 5]  # Key split choices
+                },
+                "Decision Tree": {
+                    'criterion': ['squared_error'],  # Most common loss function
+                    'max_depth': [None, 10],  # Limited depth options
+                    'min_samples_split': [2, 5]  # Faster tuning
+                },
+                "Gradient Boosting": {
+                    'n_estimators': [100, 300],  # Fewer iterations for speed
+                    'learning_rate': [0.01, 0.1],  # Balanced learning rates
+                    'max_depth': [3, 5]  # Limited depth
+                },
+                "Linear Regression": {
+                    'fit_intercept': [True, False]  # Essential option
+                },
+                "XGBRegressor": {
+                    'n_estimators': [100, 300],  # Reduced search space
+                    'learning_rate': [0.01, 0.1],  # Key learning rates
+                    'max_depth': [3, 5]  # Smaller depth range
+                },
+                "CatBoosting Regressor": {
+                    'iterations': [500],  # Single fast option
+                    'learning_rate': [0.01, 0.1],  # Common learning rates
+                    'depth': [4, 6]  # Limited depth
+                },
+                "AdaBoost Regressor": {
+                    'n_estimators': [50, 100],  # Fewer boosting rounds
+                    'learning_rate': [0.01, 0.1]  # Faster execution
+                }
+            }
+
             model_report:dict = evaluate_models(
                 X_train=X_train, 
                 y_train=y_train,
                 X_test = X_test,
                 y_test = y_test, 
-                models = models
+                models = models,
+                param = hyperparameter_grid
             )
             
             ## To get best model score from dict
